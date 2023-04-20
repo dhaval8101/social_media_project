@@ -50,23 +50,6 @@ Route::view('posts/create','posts/create');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 Route::get('delete/{id}',[RegisterController::class,'delete']);Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
