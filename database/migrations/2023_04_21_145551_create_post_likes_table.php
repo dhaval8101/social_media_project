@@ -11,23 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('post_likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->default();
-            $table->string('title');
-            $table->string('image')->nullable();
-            $table->text('content');
+            $table->foreignId('post_id')->constrained('posts')->default();
+            $table->boolean('is_like');
             $table->timestamps();
             $table->softDeletes();
-       
+
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('post_likes');
     }
 };
