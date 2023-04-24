@@ -14,6 +14,7 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
+    //create user
     public function store()
     {
         $validation = request()->validate([
@@ -30,16 +31,17 @@ class RegisterController extends Controller
         // Mail::to($user->email)->send(new Welcomemail($user));
         return redirect('/login ');
     }
+    //display data
     public function show()
     {
         $users = User::all();
         return view('show', ['users' => $users]);
     }
-
     function edit($id){
         $user= User::findOrFail($id);
         return view('update',['user'=>$user]);
         }
+    //update
     public function update(Request $request)
     {
 
@@ -53,10 +55,11 @@ class RegisterController extends Controller
             'pin_code' => 'required',
             'terms'    => 'required'
         ]);
-        $user =User::findOrFail($request->id);
-        $user->update($validation);
+    $user =User::findOrFail($request->id);
+    $user->update($validation);
     return redirect('show');
 }
+//delete data
  public function delete($id){
     $user = User::findOrFail($id);
     $user->delete();

@@ -16,11 +16,13 @@ class Post extends Model
         
     ];
 
-    public function user(){
-        $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
+    
 
-    public function like(){
-      $this->belongsToMany(User::class);
+    public function likes(){
+      $this->hasMany(Postlike::class);
     }
 }

@@ -28,7 +28,7 @@
     }
 
     .feed-image img {
-        width: 80%;
+        width: 100%;
         height: auto
     }
 
@@ -55,9 +55,13 @@
                     <div>
                         <div class="d-flex flex-row justify-content-between align-items-center p-2 border-bottom">
                             <div class="d-flex flex-row align-items-center feed-text px-2"><img class="rounded-circle" src="{{ asset($post->image) }}" width="20">
+                         <div class="d-flex flex-column flex-wrap ml-2"><span class="font-weight-bold">{{ $post->user->name }}</span><span class="text-black-50 time"></span></div>
                             </div>
-                            <div class="feed-icon px-2"> <button class="btn btn-danger"><a class="text-white" type="button" href={{'delete/'.$post['id']}}>Delete</a>
-                                    <button class="btn btn-info"><a class="text-white" type="button" href={{'posts/edit/'.$post['id']}}>edit</a></button></i></div>
+                            <div class="feed-icon px-2">
+                             {{-- <button class="btn btn-danger"><a class="text-white" type="button" href={{'delete/'.$post['id']}}>Delete</a>
+                                    <button class="btn btn-info"><a class="text-white" type="button" href={{'posts/edit/'.$post['id']}}>edit</a></button> --}}
+                                    
+                                    </i></div>
                         </div>
                     </div>
                     {{-- <div class="p-2 px-3"><span>{{ $post->content }}</span>
