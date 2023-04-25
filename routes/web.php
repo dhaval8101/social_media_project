@@ -44,8 +44,8 @@ Route::post('update', [RegisterController::class, 'update'])->name('profile.upda
 Route::view('update', 'update');
 Route::post('/posts/create', [PostController::class, 'store'])->name('create');
 Route::get('/pages', [PostController::class, 'show']);
-Route::get('/userpost',  [PostController::class,'userPost'])->name('userpost');
-Route::get('/user-management',  [PostController::class,'show']);
+Route::get('/userpost',  [PostController::class, 'userPost'])->name('userpost');
+Route::get('/user-management',  [PostController::class, 'show']);
 Route::view('posts/create', 'posts/create');
 Route::view('/postupdate', 'postupdate');
 Route::post('/upload-image', [PostController::class, 'upload']);
@@ -54,16 +54,13 @@ Route::get('delete/{id}', [RegisterController::class, 'delete']);
 Route::get('delete/{id}', [PostController::class, 'delete']);
 Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('posts.update');
-
 Route::view('/postlike', '/postlike');
-Route::post('/postlike', [PostlikeController::class, 'store'])->name('postlike.store');
-
-
+Route::get('/like/{post}', [PostlikeController::class, 'store'])->name('postlike.store');
 Route::view('pages/userpost', 'pages/userpost');
-
-
-
-
+Route::get('/posts/{postId}/likes', [PostlikeController::class, 'showPostLikes'])->name('postLikes.show');
+Route::get('/posts/{post}', [PostlikeController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post}', [PostlikeController::class, 'show']);
+Route::view('/postLikes', '/postLikes');
 
 
 

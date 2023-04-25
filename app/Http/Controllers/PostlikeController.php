@@ -5,32 +5,54 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Postlike;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 class PostlikeController extends Controller
 {
-
-        public function store(Request $request)
-    {
-        $validation = $request->validate([
-            'post_id' => 'required|exists:posts,id',
-            'user_id' => 'required|exists:users,id',
-            'is_like' => 'required|boolean',
-        ]);
-
-        $post_likes = new PostLike();
-        $post_likes->post_id = $request->post_id;
-        $post_likes->user_id = $request->user_id;
-        $post_likes->is_like = $request->is_like;
-        $post_likes->save();
-
-        return response()->json(['message' => 'Post like saved successfully']);
+    public function store(Post $post) {
+        $existingLike = Postlike::where('user_id', Auth::user()->id)
+            ->where('post_id', $post->id)
+            ->first();
+    
+        if ($existingLike && $existingLike->is_like) {
+            $existingLike->update([
+                'is_like' => false,
+            ]);
+        } elseif ($existingLike && !$existingLike->is_like) {
+            $existingLike->update([
+                'is_like' => true,
+            ]);
+        } else {
+            Postlike::create([
+                'user_id' => Auth::user()->id,
+                'post_id' => $post->id,
+                'is_like' => true,
+            ]);
+        }
+    
+        // Update like and dislike count
+        $likeCount = $post->likes->where('is_like', true)->count();
+        $dislikeCount = $post->likes->where('is_dislike', true)->count();
+    
+        // Return like/dislike count in JSON format
+    
+        return redirect('/user-management')->with('success', 'Post created successfully!');
     }
-  
+    
+
     // return view('/pages/user-management', ['posts' => $post]);    
-    public function show($id)
-{
-    $post = Post::findOrFail($id);
-    $likes = $post->likes()->get();
-    return view('pages.user-management', compact('post', 'likes'));
-}
+    public function show(Post $post)
+    {
 
+        $postlike = Postlike::where('post_id', $post->id)->first();
+
+        return view('/pages/user-management', compact('post', 'postlike'));
     }
+
+
+
+    public function showPostLikes($postId)
+    {
+        $post_likes = Postlike::where('post_id', $postId)->get();
+        return view('postLikes', ['post_likes' => $post_likes]);
+    }
+}

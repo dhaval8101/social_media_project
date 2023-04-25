@@ -15,7 +15,8 @@ return new class extends Migration
                 $table->id();
                 $table->foreignId('user_id')->constrained('users')->default();
                 $table->foreignId('post_id')->constrained('posts')->default();
-                $table->boolean('is_like');
+                $table->boolean('is_like')->default(0);
+                $table->boolean('is_dislike')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
 
