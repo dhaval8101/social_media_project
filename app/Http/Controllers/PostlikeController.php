@@ -6,42 +6,69 @@ use Illuminate\Http\Request;
 use App\Models\Postlike;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+
 class PostlikeController extends Controller
 {
-    public function store(Post $post) {
+    public function like(Post $post)
+    {
         $existingLike = Postlike::where('user_id', Auth::user()->id)
             ->where('post_id', $post->id)
             ->first();
-    
+
         if ($existingLike && $existingLike->is_like) {
             $existingLike->update([
-                'is_like' => false,
-                'is_dislike' => true,
+                'is_like' => 0,
             ]);
         } elseif ($existingLike && !$existingLike->is_like) {
             $existingLike->update([
-                'is_like' => true,
-                'is_dislike' => false,
+                'is_like' => 1,
+                'is_dislike' => 0,
             ]);
         } else {
             Postlike::create([
                 'user_id' => Auth::user()->id,
                 'post_id' => $post->id,
-                'is_like' => false,
-                'is_dislike' => true,
+                'is_like' => 1,
+                'is_dislike' => 0,
             ]);
         }
-    
         // Update like and dislike count
-        $likeCount = $post->likes->where('is_like', true)->count();
-        $dislikeCount = $post->likes->where('is_dislike', true)->count();
-    
+        $likeCount = $post->likes->where('is_like', 1)->count();
         // Return like/dislike count in JSON format
-    
-        return redirect('/user-management')->with('success', 'Post created successfully!');
+
+        return redirect('/user-management')->with('success', 'Post liked successfully!');
     }
-    
-    
+    public function dislike(Post $post)
+    {
+        $existingDislike = Postlike::where('user_id', Auth::user()->id)
+            ->where('post_id', $post->id)
+            ->first();
+
+        if ($existingDislike && $existingDislike->is_dislike) {
+            $existingDislike->update([
+                'is_dislike' => 0,
+            ]);
+        } elseif ($existingDislike && !$existingDislike->is_dislike) {
+            $existingDislike->update([
+                'is_dislike' => 1,
+                'is_like' => 0,
+            ]);
+        } else {
+            Postlike::create([
+                'user_id' => Auth::user()->id,
+                'post_id' => $post->id,
+                'is_dislike' => 1,
+                'is_like' => 0,
+            ]);
+        }
+
+        // Update like and dislike count
+        $dislikeCount = $post->likes->where('is_dislike', 1)->count();
+
+        // Return like/dislike count in JSON format
+        return redirect('/user-management')->with('success', 'Post disliked successfully!');
+    }
+
 
     // return view('/pages/user-management', ['posts' => $post]);    
     public function show(Post $post)

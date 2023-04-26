@@ -27,21 +27,6 @@ class Post extends Model
   {
     return $this->hasMany(Postlike::class);
   }
-  public function likedBy(User $user)
-  {
-    return $this->likes->contains('user_id', $user->id);
-  }
-  public function dislikedBy(User $user)
-{
-    return $this->likes()->where('user_id', $user->id)->where('is_like', false)->exists();
-}
-public function likesCount()
-{
-    return $this->likes->where('is_like', true)->count();
-}
-public function dislikesCount()
-{
-    return $this->hasMany(Postlike::class)->where('is_like', 0)->count();
-}
+
 
 }

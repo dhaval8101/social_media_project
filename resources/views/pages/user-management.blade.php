@@ -37,35 +37,28 @@
         height: auto
     }
 
-    .btn {
-        background: transparent;
-        border: none;
+    .like-button,
+    .dislike-button {
 
-        outline: none;
+        text-decoration: none;
+        color: #333;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
     }
 
-    .fa-thumbs {
-        color: blue;
+    .like-icon,
+    .dislike-icon {
+        margin-right: 4px;
     }
 
-.like-button {
-    background-color: #ccc;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-}
-.dislike-button {
-    background-color: #ccc;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-}
-.like-button:hover {
-    background-color: blue;
-}
-.dislike-button {
-    background-color: #555;
-}
+    .like-count,
+    .dislike-count {
+        margin-left: 5px;
+        font-weight: bold;
+    }
+
 </style>
 <br>
 <br>
@@ -119,21 +112,25 @@
                     <p><strong>Dislike:</strong> <span class="dislike-count">{{ $post->likes->where('is_dislike', true)->count() }}</span></p>
 
                     {{-- <a onclick="Toggle1(this)" class="btn" href="{{ url('like/'.$post->id) }}">
-                        <i class="fa fa-thumbs-o-up thumbs-icon {{ isset($postlike) && $postlike->is_like ? 'fa-thumbs' : '' }}" aria-hidden="true"></i>
+                    <i class="fa fa-thumbs-o-up thumbs-icon {{ isset($postlike) && $postlike->is_like ? 'fa-thumbs' : '' }}" aria-hidden="true"></i>
                     </a>
                     <a onclick="Toggle1(this)" class="btn" href="{{ url('like/'.$post->id) }}">
                         <i class="fa fa-thumbs-o-down thumbs-icon {{ isset($postlike) && $postlike->is_dislike ? 'fa-thumbs' : '' }}" aria-hidden="true"></i>
                     </a> --}}
+                    <a class="like-button" href="{{ url('like/'.$post->id) }}">
+                        <button type="button" class="btn btn-link">
+                            <i class="fa like-icon"></i>
+                            <span class="like-count">like</span>
+                        </button>
+                    </a>
 
-<a class="like-button" href="{{ url('like/'.$post->id) }}" data-post-id="{{ $post->id }}" data-like="{{ $post->likedBy(Auth::user()) ? 'true' : 'false' }}" data-dislike="{{ $post->dislikedBy(Auth::user()) ? 'true' : 'false' }}">
-    <i class="fa {{ $post->likedBy(Auth::user()) ? 'fa-thumbs-up' : 'fa-thumbs-o-up' }} like-icon"></i>
-    <span class="like-count">{{ $post->likesCount() }}</span>
-</a>
 
-<a class="dislike-button" href="{{ url('like/'.$post->id) }}" data-post-id="{{ $post->id }}" data-like="{{ $post->likedBy(Auth::user()) ? 'true' : 'false' }}" data-dislike="{{ $post->dislikedBy(Auth::user()) ? 'true' : 'false' }}">
-    <i class="fa {{ $post->dislikedBy(Auth::user()) ? 'fa-thumbs-down' : 'fa-thumbs-o-down' }} dislike-icon"></i>
-    <span class="dislike-count">{{ $post->dislikesCount() }}</span>
-</a>
+                    <a class="dislike-button" href="{{ url('dislike/'.$post->id) }}">
+                        <button type="button" class="btn btn-link">
+                            <i class="fa  dislike-icon"></i>
+                            <span class="dislike-count">dislike</span>
+                        </button>
+                    </a>
 
                     <div class="d-flex justify-content-end socials p-21 py-31"><i class="fa fa-comments-o"></i></div>
                     <div class="p-2 px-3"><span>{{ $post->content }}</span></div>
@@ -146,63 +143,66 @@
     @endif
     @endforeach
     <script>
-   
-   document.addEventListener('DOMContentLoaded', function() {
-    const likeButtons = document.querySelectorAll('.like-button');
-    likeButtons.forEach(likeButton => {
-        likeButton.addEventListener('click', function() {
-            const postID = this.dataset.postId;
-            const isLike = this.dataset.like === 'true';
-            const isDislike = this.dataset.dislike === 'true';
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.like-button');
+            likeButtons.forEach(likeButton => {
+                likeButton.addEventListener('click', function() {
+                    const postID = this.dataset.postId;
+                    const isLike = this.dataset.like === 'true';
+                    const isDislike = this.dataset.dislike === 'true';
 
-            fetch(`/like/${postID}`, {
-                method: 'POST',
-                body: JSON.stringify({ is_like: isLike, is_dislike: isDislike }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to update like count');
-                }
-            }).then(data => {
-                const likeCountElement = this.querySelector('.like-count');
-                if (likeCountElement) {
-                    likeCountElement.innerText = data.likeCount;
-                }
+                    fetch(`/like/${postID}`, {
+                        method: 'POST'
+                        , type: 'POST'
+                        , body: JSON.stringify({
+                            is_like: isLike
+                            , is_dislike: isDislike
+                        })
+                        , headers: {
+                            'Content-Type': 'application/json'
+                            , 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Failed to update like count');
+                        }
+                    }).then(data => {
+                        const likeCountElement = this.querySelector('.like-count');
+                        if (likeCountElement) {
+                            likeCountElement.innerText = data.likeCount;
+                        }
 
-                const likeIconElement = this.querySelector('.like-icon');
-                if (likeIconElement) {
-                    if (data.isLiked) {
-                        likeIconElement.classList.remove('fa-thumbs-o-up');
-                        likeIconElement.classList.add('fa-thumbs-up');
-                    } else {
-                        likeIconElement.classList.remove('fa-thumbs-up');
-                        likeIconElement.classList.add('fa-thumbs-o-up');
-                    }
-                }
+                        const likeIconElement = this.querySelector('.like-icon');
+                        if (likeIconElement) {
+                            if (data.isLiked) {
+                                likeIconElement.classList.remove('fa-thumbs-o-up');
+                                likeIconElement.classList.add('fa-thumbs-up');
+                            } else {
+                                likeIconElement.classList.remove('fa-thumbs-up');
+                                likeIconElement.classList.add('fa-thumbs-o-up');
+                            }
+                        }
 
-                const dislikeIconElement = this.querySelector('.dislike-icon');
-                if (dislikeIconElement) {
-                    if (data.isDisliked) {
-                        dislikeIconElement.classList.remove('fa-thumbs-o-down');
-                        dislikeIconElement.classList.add('fa-thumbs-down');
-                    } else {
-                        dislikeIconElement.classList.remove('fa-thumbs-down');
-                        dislikeIconElement.classList.add('fa-thumbs-o-down');
-                    }
-                }
-            }).catch(error => {
-                console.error(error);
+                        const dislikeIconElement = this.querySelector('.dislike-icon');
+                        if (dislikeIconElement) {
+                            if (data.isDisliked) {
+                                dislikeIconElement.classList.remove('fa-thumbs-o-down');
+                                dislikeIconElement.classList.add('fa-thumbs-down');
+                            } else {
+                                dislikeIconElement.classList.remove('fa-thumbs-down');
+                                dislikeIconElement.classList.add('fa-thumbs-o-down');
+                            }
+                        }
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                });
             });
         });
-    });
-});
 
-</script>
+    </script>
 
 
 </body>
