@@ -28,8 +28,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostlikeController;
+use App\Models\Postcomment;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -62,11 +64,8 @@ Route::get('/posts/{postId}/likes', [PostlikeController::class, 'showPostLikes']
 Route::get('/posts/{post}', [PostlikeController::class, 'show'])->name('posts.show');
 Route::get('/posts/{post}', [PostlikeController::class, 'show']);
 Route::view('/postLikes', '/postLikes');
-
-
-
-
-
+    Route::post('/comment/{post}', [PostCommentController::class, 'store'])->name('comment.store');
+    Route::get('/comment/{post}', [PostCommentController::class, 'comment'])->name('comment.view');
 
 
 

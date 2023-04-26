@@ -66,4 +66,7 @@ class User extends Authenticatable
     public function likes(){
         $this->hasMany(Postlike::class);
     }
+    public function postcomment(){
+        return $this->hasMany(Postcomment::class);
+      }
 }

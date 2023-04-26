@@ -42,10 +42,11 @@
 
         text-decoration: none;
         color: #333;
-        padding: 5px 10px;
+        padding: 7px 5px;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-right: 10px;
+        border-radius: 10px;
+        margin-right: 5px;
+
     }
 
     .like-icon,
@@ -118,21 +119,27 @@
                         <i class="fa fa-thumbs-o-down thumbs-icon {{ isset($postlike) && $postlike->is_dislike ? 'fa-thumbs' : '' }}" aria-hidden="true"></i>
                     </a> --}}
                     <a class="like-button" href="{{ url('like/'.$post->id) }}">
-                        <button type="button" class="btn btn-link">
+                        <button type="button" style="color:#0000FF;" class="btn btn-link">
                             <i class="fa like-icon"></i>
-                            <span class="like-count">like</span>
+                            <span class="like-count"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> like</span>
                         </button>
                     </a>
 
 
                     <a class="dislike-button" href="{{ url('dislike/'.$post->id) }}">
-                        <button type="button" class="btn btn-link">
+                        <button type="button" style="color:#FF0000" class="btn btn-link">
                             <i class="fa  dislike-icon"></i>
-                            <span class="dislike-count">dislike</span>
+                            <span class="dislike-count"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> dislike</span>
                         </button>
-                    </a>
 
-                    <div class="d-flex justify-content-end socials p-21 py-31"><i class="fa fa-comments-o"></i></div>
+                    </a>
+                    </a>
+              <a href="{{ route('comment.view', $post->id) }}" class="d-flex align-items-center me-3">
+    <i class="far fa-comment-dots me-2"></i>
+    <p class="mb-0">Comment</p>
+</a>
+
+                    {{-- <div class="d-flex justify-content-end socials p-21 py-31"><i class="fa fa-comments-o"></i></div> --}}
                     <div class="p-2 px-3"><span>{{ $post->content }}</span></div>
 
                 </div>
@@ -140,6 +147,9 @@
         </div>
     </div>
     </div>
+    <section style="background-color: #eee;">
+
+    </section>
     @endif
     @endforeach
     <script>

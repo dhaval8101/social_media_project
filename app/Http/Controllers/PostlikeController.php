@@ -11,16 +11,16 @@ class PostlikeController extends Controller
 {
     public function like(Post $post)
     {
-        $existingLike = Postlike::where('user_id', Auth::user()->id)
+        $like = Postlike::where('user_id', Auth::user()->id)
             ->where('post_id', $post->id)
             ->first();
 
-        if ($existingLike && $existingLike->is_like) {
-            $existingLike->update([
+        if ($like && $like->is_like) {
+            $like->update([
                 'is_like' => 0,
             ]);
-        } elseif ($existingLike && !$existingLike->is_like) {
-            $existingLike->update([
+        } elseif ($like && !$like->is_like) {
+            $like->update([
                 'is_like' => 1,
                 'is_dislike' => 0,
             ]);
@@ -40,16 +40,16 @@ class PostlikeController extends Controller
     }
     public function dislike(Post $post)
     {
-        $existingDislike = Postlike::where('user_id', Auth::user()->id)
+        $dislike = Postlike::where('user_id', Auth::user()->id)
             ->where('post_id', $post->id)
             ->first();
 
-        if ($existingDislike && $existingDislike->is_dislike) {
-            $existingDislike->update([
+        if ($dislike && $dislike->is_dislike) {
+            $dislike->update([
                 'is_dislike' => 0,
             ]);
-        } elseif ($existingDislike && !$existingDislike->is_dislike) {
-            $existingDislike->update([
+        } elseif ($dislike && !$dislike->is_dislike) {
+            $dislike->update([
                 'is_dislike' => 1,
                 'is_like' => 0,
             ]);

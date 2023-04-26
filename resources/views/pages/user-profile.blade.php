@@ -8,22 +8,22 @@
 
 </head>
 <body>
-<br>
-<br>
+    <br>
+    <br>
 
 
     <div class="container">
 
         <div class="row">
             @foreach ($posts as $post)
-            
-            <div class="col col-lg-4 border bg-light px-md-5"><img src="{{ asset($post->image) }}" alt="" style="width:100%;margin-top:15%;margin-bottom:10%;height: 80%"></div>
+
+            <div class="col col-lg-4 border bg-light px-md-5"><img src="{{ asset($post->image) }}" alt="" style="width:100%;margin-top:15%;margin-bottom:10%;height:80%"></div>
             @endforeach
         </div>
 
     </div>
-  <div class="feed-icon px-2"> <button class="btn btn-danger"><a class="text-white" type="button" href={{'delete/'.$post['id']}}>Delete</a>
-                                    <button class="btn btn-info"><a class="text-white" type="button" href={{'posts/edit/'.$post['id']}}>edit</a></button></i></div>
-                        </div>
+    <div class="feed-icon px-2"> <button class="btn btn-danger"><a class="text-white" type="button" href={{'delete/'.$post['id']}}>Delete</a>
+            <button class="btn btn-info"><a class="text-white" type="button" href={{'posts/edit/'.$post['id']}}>edit</a></button></i></div>
+    </div>
 </body>
 </html>
