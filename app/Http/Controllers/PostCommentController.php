@@ -14,13 +14,13 @@ class PostCommentController extends Controller
      * Store a newly created resource in storage.
      */
 
- 
 
-    public function store(Request $request,Post $post)
+
+    public function store(Request $request, Post $post)
     {
 
         $postcomment = new Postcomment();
-        $postcomment->post_id =$post->id; 
+        $postcomment->post_id = $post->id;
         $postcomment->user_id = auth()->id();
         $postcomment->comment = $request->comment;
         $postcomment->save();
@@ -28,22 +28,23 @@ class PostCommentController extends Controller
         //return view('comment');
     }
 
-    
+
     public function comment(Post $post)
     {
+        $postcomment = Postcomment::where('post_id', $post->id)
+            ->orderByDesc('created_at')
+            ->get();
 
-        $postcomment = Postcomment::where('post_id', $post->id)->get();
-     
         return view('/comment', compact('post', 'postcomment'));
     }
-    
+
 
 
     /**
      * Display the specified resource.
      */
-  
-    
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -63,8 +64,10 @@ class PostCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Postcomment $postcomment)
     {
-        //
+        $postcomment->delete();
+        return redirect()->back()->with('success', 'Post comment deleted successfully');
     }
+    
 }

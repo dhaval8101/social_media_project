@@ -68,7 +68,7 @@ Route::view('/postLikes', '/postLikes');
     Route::get('/comment/{post}', [PostCommentController::class, 'comment'])->name('comment.view');
 
 
-
+    Route::get('/postcomment/{postcomment}', [PostCommentController::class,'destroy'])->name('postcomment.destroy');
 
 
 
