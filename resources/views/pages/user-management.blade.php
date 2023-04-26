@@ -61,7 +61,7 @@
     padding: 10px 20px;
 }
 .like-button:hover {
-    background-color: #555;
+    background-color: blue;
 }
 .dislike-button {
     background-color: #555;

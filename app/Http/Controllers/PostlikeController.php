@@ -16,16 +16,19 @@ class PostlikeController extends Controller
         if ($existingLike && $existingLike->is_like) {
             $existingLike->update([
                 'is_like' => false,
+                'is_dislike' => true,
             ]);
         } elseif ($existingLike && !$existingLike->is_like) {
             $existingLike->update([
                 'is_like' => true,
+                'is_dislike' => false,
             ]);
         } else {
             Postlike::create([
                 'user_id' => Auth::user()->id,
                 'post_id' => $post->id,
-                'is_like' => true,
+                'is_like' => false,
+                'is_dislike' => true,
             ]);
         }
     
@@ -37,6 +40,7 @@ class PostlikeController extends Controller
     
         return redirect('/user-management')->with('success', 'Post created successfully!');
     }
+    
     
 
     // return view('/pages/user-management', ['posts' => $post]);    
