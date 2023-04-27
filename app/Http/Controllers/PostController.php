@@ -46,7 +46,7 @@ class PostController extends Controller
      return view('pages/userpost', ['posts' => $post]);
  }
  
-    public function edit(Post $post)
+    public function edit(Post $post)    
     {
         return view('posts.update', compact('post'));
     }

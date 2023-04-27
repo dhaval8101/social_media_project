@@ -29,9 +29,11 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\PostCommentController;
+
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostlikeController;
 use App\Models\Postcomment;
+use App\Http\Controllers\PostCommentLikeController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -44,11 +46,11 @@ Route::get('update/{id}', [RegisterController::class, 'edit']);
 Route::get('/show', [RegisterController::class, 'show']);
 Route::post('update', [RegisterController::class, 'update'])->name('profile.update');
 Route::view('update', 'update');
-Route::post('/posts/create', [PostController::class, 'store'])->name('create');
+Route::post('/pages/create', [PostController::class, 'store'])->name('create');
 Route::get('/pages', [PostController::class, 'show']);
 Route::get('/userpost',  [PostController::class, 'userPost'])->name('userpost');
 Route::get('/user-management',  [PostController::class, 'show']);
-Route::view('posts/create', 'posts/create');
+Route::view('pages/create', 'pages/create');
 Route::view('/postupdate', 'postupdate');
 Route::post('/upload-image', [PostController::class, 'upload']);
 Route::view('/test', '/test');
@@ -64,11 +66,13 @@ Route::get('/posts/{postId}/likes', [PostlikeController::class, 'showPostLikes']
 Route::get('/posts/{post}', [PostlikeController::class, 'show'])->name('posts.show');
 Route::get('/posts/{post}', [PostlikeController::class, 'show']);
 Route::view('/postLikes', '/postLikes');
-    Route::post('/comment/{post}', [PostCommentController::class, 'store'])->name('comment.store');
-    Route::get('/comment/{post}', [PostCommentController::class, 'comment'])->name('comment.view');
+Route::post('/comment/{post}', [PostCommentController::class, 'store'])->name('comment.store');
+Route::get('/comment/{post}', [PostCommentController::class, 'comment'])->name('comment.view');
 
+Route::get('/is-like/{post_id}/{comment_id?}', [PostCommentLikeController::class, 'isLike'])->name('postlike.likecomment');
+Route::get('/dis-like/{post}/{postcomment?}', [PostCommentLikeController::class, 'disLike'])->name('postlike.likecomment');
 
-    Route::get('/postcomment/{postcomment}', [PostCommentController::class,'destroy'])->name('postcomment.destroy');
+Route::get('/postcomment/{postcomment}', [PostCommentController::class, 'destroy'])->name('postcomment.destroy');
 
 
 
