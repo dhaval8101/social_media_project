@@ -64,10 +64,10 @@ class PostCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Postcomment $postcomment)
+    public function destroy($id)
     {
+        $postcomment = Postcomment::findOrFail($id);
         $postcomment->delete();
         return redirect()->back()->with('success', 'Post comment deleted successfully');
     }
-    
 }

@@ -41,12 +41,12 @@
 
     .like-icon,
     .dislike-icon {
-        margin-right: 4px;
+        margin-right: 1px;
     }
 
     .like-count,
     .dislike-count {
-        margin-left: 5px;
+        margin-left: 1px;
         font-weight: bold;
     }
 .like-icon.active {
@@ -118,23 +118,19 @@
                     </a> --}}
   <a class="like-button" href="{{ url('like/'.$post->id) }}">
                         <button type="button" class="btn btn-link">
-                            <i  class="fa fa-thumbs-up like-icon{{ $post->likes->where('user_id', Auth::id())->where('is_like', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+                            <i  class="fa fa-thumbs-up like-icon{{ $post->likes->where('user_id', Auth::id())->where('is_like', true)->count() > 0 ? ' active' : '' }}" style="font-size:25px"></i>
                             <span class="like-count">{{ $post->likes->where('is_like', true)->count() }}</span>
                         </button>
                     </a>
                     <a class="dislike-button" href="{{ url('dislike/'.$post->id) }}">
                         <button type="button" class="btn btn-link">
-                            <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+                            <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:25px"></i>
                             <span class="dislike-count">{{ $post->likes->where('is_dislike', true)->count() }}</span>
                         </button>
                     </a>
 
-
-
-                    </a>
-                    </a>
               <a href="{{ route('comment.view', $post->id) }}" class="d-flex align-items-center me-3">
-    <i class="far fa-comment-dots me-2"></i>
+    <i class="far fa-comment-dots me-2" style="margin:20px"></i>
     <p class="mb-0">Comment</p>
 </a>
 

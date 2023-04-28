@@ -27,4 +27,5 @@ class Postcomment extends Model
     {
         return $this->hasMany(Postcommentlike::class);
     }
+
 }

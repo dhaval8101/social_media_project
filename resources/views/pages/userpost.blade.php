@@ -27,7 +27,9 @@
             <div class="col col-lg-3 border bg-light px-md-5">
                 <img class="img-fluid my-4" style="height:300px;" src="{{ asset($post->image) }}" alt="">
                 <button class="btn btn-danger mb-4 "><a type="button" class="link-light text-decoration-none" href={{'delete/'.$post['id']}}>Delete</a>
-                <button class="btn btn-success mb-4 mx-3 "><a type="button" class="link-light text-decoration-none" href={{'posts/edit/'.$post['id']}}  >Edit</a>
+               
+             <button class="btn btn-success mb-4 mx-3 "><a type="button" class="link-light text-decoration-none" href={{'posts/edit/'.$post['id']}}  >Edit</a>
+            
             </div>
 
             @endforeach

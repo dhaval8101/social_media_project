@@ -34,6 +34,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostlikeController;
 use App\Models\Postcomment;
 use App\Http\Controllers\PostCommentLikeController;
+use App\Http\Controllers\RecommentController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -70,10 +71,11 @@ Route::post('/comment/{post}', [PostCommentController::class, 'store'])->name('c
 Route::get('/comment/{post}', [PostCommentController::class, 'comment'])->name('comment.view');
 
 Route::get('/is-like/{post_id}/{comment_id?}', [PostCommentLikeController::class, 'isLike'])->name('postlike.likecomment');
-Route::get('/dis-like/{post}/{postcomment?}', [PostCommentLikeController::class, 'disLike'])->name('postlike.likecomment');
+Route::get('/dis-like/{post_id}/{comment_id?}', [PostCommentLikeController::class, 'disLike'])->name('postlike.likecomment');
 
-Route::get('/postcomment/{postcomment}', [PostCommentController::class, 'destroy'])->name('postcomment.destroy');
+Route::get('/postcomment/{id}', [PostCommentController::class, 'destroy'])->name('postcomment.destroy');
 
+ Route::post('/comment/{postcomment}', [RecommentController::class, 'storec'])->name('comment.storec');
 
 
 

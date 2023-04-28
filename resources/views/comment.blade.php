@@ -1,6 +1,6 @@
 <html>
 <head>
-
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
@@ -11,8 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-ZNDeGds1Ntwpgx5W5y+j+5PjJ/A/2QrP3WZL2Qm1M6U7z6RKpG6y9EL6gLvggCfKz43JW8Ebsav34AlYcKrx+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {{-- <style>
 
@@ -331,25 +333,29 @@ form{
             margin-top: 15px;
         }
 
-    .like-icon,
-    .dislike-icon {
-        margin-right: 4px;
-    }
+        .like-icon,
+        .dislike-icon {
+            margin-right: 4px;
+        }
 
-    .like-count,
-    .dislike-count {
-        margin-left: 5px;
-        font-weight: bold;
-    }
-.like-icon.active {
-    color: blue;
-}
-.dislike-icon.active {
-    color: red;
-}
-.like-icon, .dislike-icon {
-    color: grey;
-}
+        .like-count,
+        .dislike-count {
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .like-icon.active {
+            color: blue;
+        }
+
+        .dislike-icon.active {
+            color: red;
+        }
+
+        .like-icon,
+        .dislike-icon {
+            color: grey;
+        }
 
     </style>
 
@@ -361,8 +367,9 @@ form{
                 <div class="panel">
                     <div class="panel-body">
                         <textarea class="form-control" name="comment" rows="2" placeholder="Add Comment......"></textarea>
+
                         <div class="mar-top clearfix">
-                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i>send</button>
+                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-paper-plane" style="color:pink;font-size:22px;" aria-hidden="true"></i></button>
                             {{-- <a class="btn btn-trans btn-icon fa fa-video-camera add-tooltip" href="#"></a>
       <a class="btn btn-trans btn-icon fa fa-camera add-tooltip" href="#"></a>
       <a class="btn btn-trans btn-icon fa fa-file add-tooltip" href="#"></a> --}}
@@ -388,27 +395,52 @@ form{
                     <div class="pad-ver">
                         <div class="btn-group">
 
-
-<a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
-    <button type="button" class="btn btn-link">
-        <i class="fa fa-thumbs-up like-icon"></i>
-        <span class="like-count">{{ $comment->likes ? $comment->likes->where('is_like', true)->count() : 0 }}
-</span>
-    </button>
-</a>
-
+                            <a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
+                                <button type="button" class="btn btn-link">
+                                    <i class="fa fa-thumbs-up like-icon{{ $comment->likes && $comment->likes->where('user_id', Auth::id())->where('like', true)->count() > 0 ? ' active' : '' }}" style="font-size:20px"></i>
+                                    <span class="like-count">{{ $comment->likes ? $comment->likes->where('like', true)->count() : 0 }}</span>
+                                </button>
+                            </a>
 
                             <a class="dislike-button" href="{{ url('dis-like/'. $post->id.'/' .$comment->id) }}">
                                 <button type="button" class="btn btn-link">
-                                    <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
-                                    <span class="dislike-count">{{ $post->likes->where('is_dislike', true)->count() }}</span>
+                                    <i class="fa fa-thumbs-down dislike-icon{{ $comment->likes && $comment->likes->where('user_id', Auth::id())->where('dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:20px"></i>
+                                    <span class="dislike-count">{{ $comment->likes ? $comment->likes->where('dislike', true)->count() : 0 }}</span>
                                 </button>
                             </a>
                         </div>
-                        <a class="btn btn-sm btn-default btn-hover-primary" href="#">Comment</a>
+                        <a class="btn btn-sm btn-default btn-hover-primary"   href="#" data-toggle="modal" data-target="#myModal">Comment</a>
                     </div>
                     <hr>
+                    @if (auth()->check() && auth()->user()->id === $comment->user_id)
+                    <button class="btn btn-dark mb-4 "><a type="submit" style="color:white" class="link-light text-decoration-none" href={{url('postcomment/'.$comment->id) }}>Delete</a></button>
+                    @endif
+                    <!-- Button trigger modal -->
+                    {{-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --}}
 
+                    <!-- Modal -->
+                    {{-- <form method='post' action="{{ route('comment.storec', $postcomment) }}"> --}}
+                    {{-- @csrf   --}}
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">cancel</h4>
+                                </div>
+                                <div class="modal-body">
+                                    comment:-<input type="text" name="recomment" placeholder="comment here.....">
+                                    <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-paper-plane" style="color:pink;font-size:22px;" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                     <!-- Comments -->
 
                 </div>
@@ -416,7 +448,7 @@ form{
         </div>
         <!--===================================================-->
         <!-- End Newsfeed Content -->
-
+        </form>
 
         <!-- Newsfeed Content -->
         <!--===================================================-->
@@ -432,69 +464,70 @@ form{
     </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const likeButtons = document.querySelectorAll('.like-button');
-            likeButtons.forEach(likeButton => {
-                likeButton.addEventListener('click', function() {
-                    const postID = this.dataset.postId;
-                    const isLike = this.dataset.like === 'true';
-                    const isDislike = this.dataset.dislike === 'true';
-
-                    fetch(`/like/${postID}`, {
-                        method: 'POST'
-                        , type: 'POST'
-                        , body: JSON.stringify({
-                            is_like: isLike
-                            , is_dislike: isDislike
-                        })
-                        , headers: {
-                            'Content-Type': 'application/json'
-                            , 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                            return response.json();
+        $(document).ready(function() {
+            $('.like-button').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var icon = $(this).find('.like-icon');
+                var count = $(this).find('.like-count');
+                $.ajax({
+                    url: url
+                    , method: 'GET'
+                    , success: function(response) {
+                        count.text(response.like_count);
+                        if (icon.hasClass('active')) {
+                            icon.removeClass('active');
                         } else {
-                            throw new Error('Failed to update like count');
+                            icon.addClass('active');
                         }
-                    }).then(data => {
-                        const likeCountElement = this.querySelector('.like-count');
-                        if (likeCountElement) {
-                            likeCountElement.innerText = data.likeCount;
+                    }
+                });
+            });
+        });
+        $(document).ready(function() {
+            $('.dislike-button').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var icon = $(this).find('.dislike-icon');
+                var count = $(this).find('.dislike-count');
+                $.ajax({
+                    url: url
+                    , method: 'GET'
+                    , success: function(response) {
+                        count.text(response.dislike_count);
+                        if (icon.hasClass('active')) {
+                            icon.removeClass('active');
+                        } else {
+                            icon.addClass('active');
                         }
-
-                        const likeIconElement = this.querySelector('.like-icon');
-                        if (likeIconElement) {
-                            if (data.isLiked) {
-                                likeIconElement.classList.remove('fa-thumbs-o-up');
-                                likeIconElement.classList.add('fa-thumbs-up');
-                            } else {
-                                likeIconElement.classList.remove('fa-thumbs-up');
-                                likeIconElement.classList.add('fa-thumbs-o-up');
-                            }
+                    }
+                });
+            });
+        });
+        $(document).ready(function() {
+            $('.dislike-button').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var icon = $(this).find('.dislike-icon');
+                var count = $(this).find('.dislike-count');
+                $.ajax({
+                    url: url
+                    , method: 'GET'
+                    , success: function(response) {
+                        count.text(response.dislike_count);
+                        if (icon.hasClass('active')) {
+                            icon.removeClass('active');
+                        } else {
+                            icon.addClass('active');
                         }
-
-                        const dislikeIconElement = this.querySelector('.dislike-icon');
-                        if (dislikeIconElement) {
-                            if (data.isDisliked) {
-                                dislikeIconElement.classList.remove('fa-thumbs-o-down');
-                                dislikeIconElement.classList.add('fa-thumbs-down');
-                            } else {
-                                dislikeIconElement.classList.remove('fa-thumbs-down');
-                                dislikeIconElement.classList.add('fa-thumbs-o-down');
-                            }
-                        }
-                    }).catch(error => {
-                        console.error(error);
-                    });
+                    }
                 });
             });
         });
 
+    </script>
 
-</script>
 
-   
     </body>
 </head>
 </html>

@@ -42,75 +42,69 @@ class PostCommentLikeController extends Controller
             ->first();
     
         if (!$like) {
-            // This is the first click, so create a new record with is_like set to 1
+            // This is the first click, so create a new record with like set to 1
             $like = Postcommentlike::create([
                 'user_id' => Auth::id(),
                 'post_id' => $post_id,
-                'is_like' => 1,
-                'is_dislike' => 0,
+                'like' => 1,
+                'dislike' => 0,
                 'postcomment_id' => $comment_id,
             ]);
-        } elseif ($like->is_like) {
-            // This is the second click, so update the existing record to set is_like to 0
-            $like->update(['is_like' => 0, 'is_dislike' => 1]);
+        } elseif ($like->like) {
+            // This is the second click, so update the existing record to set like to 0
+            $like->update(['like' => 0, 'dislike' => 0]);
         } else {
-            // This is an intermediate click, so update the existing record to set is_like to 1
-            $like->update(['is_like' => 1, 'is_dislike' => 0]);
+            // This is an intermediate click, so update the existing record to set like to 1
+            $like->update(['like' => 1, 'dislike' => 0]);
         }
     
         $likeCount = Postcommentlike::where('post_id', $post_id)
-        ->where('postcomment_id', $comment_id)
-        ->where('is_like', true)
-        ->count();
+            ->where('postcomment_id', $comment_id)
+            ->where('like', true)
+            ->count();
     
         return response()->json(['like_count' => $likeCount, 'message' => 'Comment liked/disliked successfully!']);
     }
     
+    // Update like and dislike count
+    //$likeCount = $like->where('is_like', 1)->first();
+    //$dislikeCount = $postcomment->likes->where('is_dislike', 1)->count();
 
+    // Return like/dislike count in JSON format
 
-
-        // Update like and dislike count
-        //$likeCount = $like->where('is_like', 1)->first();
-        //$dislikeCount = $postcomment->likes->where('is_dislike', 1)->count();
-
-        // Return like/dislike count in JSON format
- 
-
-    public function disLike(Post $post, Postcomment $postcomment)
+    public function disLike( $post_id,  $comment_id)
     {
         $like = Postcommentlike::where('user_id', Auth::user()->id)
-            ->where('post_id', $post->id)
-            ->where('postcomment_id', $postcomment->id)
+            ->where('post_id', $post_id)
+            ->where('postcomment_id', $comment_id)
             ->first();
-
+    
         if (!$like) {
-            // This is the first click, so create a new record with is_dislike set to 1
+            // This is the first click, so create a new record with dislike set to 1
             $like = Postcommentlike::create([
                 'user_id' => Auth::user()->id,
-                'post_id' => $post->id,
-                'is_like' => 0,
-                'is_dislike' => 1,
-                'postcomment_id' => $postcomment->id,
+                'post_id' => $post_id,
+                'like' => 0,
+                'dislike' => 1,
+                'postcomment_id' => $comment_id,
             ]);
-        } elseif ($like->is_dislike) {
-            // This is the second click, so update the existing record to set is_dislike to 0
-            $like->update(['is_dislike' => 0]);
+        } elseif ($like->dislike) {
+            // This is the second click, so update the existing record to set dislike to 0
+            $like->update(['dislike' => 0]);
         } else {
-            // This is an intermediate click, so update the existing record to set is_dislike to 1
-            $like->update(['is_dislike' => 1, 'is_like' => 0]);
+            // This is an intermediate click, so update the existing record to set dislike to 1
+            $like->update(['dislike' => 1, 'like' => 0]);
         }
-
-
-
-
-        // Update like and dislike count
-        //$likeCount = $like->where('is_like', 1)->first();
-        //$dislikeCount = $postcomment->likes->where('is_dislike', 1)->count();
-
-        // Return like/dislike count in JSON format
-        return redirect('/user-management')->with('success', 'Comment liked/disliked successfully!');
+        
+        $dislikeCount = Postcommentlike::where('post_id',  $post_id)
+            ->where('postcomment_id', $comment_id)
+            ->where('dislike', true)
+            ->count();
+    
+        return response()->json(['dislike_count' => $dislikeCount, 'message' => 'Comment liked/disliked successfully!']);
     }
-
+    
+    
 
 
     /**

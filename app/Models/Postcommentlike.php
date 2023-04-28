@@ -14,8 +14,8 @@ class Postcommentlike extends Model
     'user_id',
     'post_id',
     'postcomment_id',
-    'is_like',
-    'is_dislike'
+    'like',
+    'dislike'
 
         
     ];

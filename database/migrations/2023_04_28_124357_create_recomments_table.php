@@ -11,24 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_comment_likes', function (Blueprint $table) {
+        Schema::create('recomments', function (Blueprint $table) {
             $table->id();
+            $table->string('recomment');
             $table->foreignId('user_id')->constrained('users')->deafault(0);
             $table->foreignId('post_id')->constrained('posts')->deafault(0);
-            $table->foreignId('postcomment_id')->nullable()->constrained('post_comments');
-
-            $table->boolean('like');
-            $table->boolean('dislike');
+            $table->foreignId('postcomment_id')->constrained('post_comments');  
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_comment_likes');
+        Schema::dropIfExists('recomments');
     }
 };
