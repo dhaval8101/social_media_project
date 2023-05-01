@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained('posts')->deafault(0);
             $table->foreignId('postcomment_id')->nullable()->constrained('post_comments');
 
-            $table->boolean('like');
-            $table->boolean('dislike');
+            $table->boolean('is_like');
+            $table->boolean('is_dislike');
             $table->timestamps();
         });
     }

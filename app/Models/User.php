@@ -73,4 +73,8 @@ class User extends Authenticatable
 
         return $this->hasMany(Postcommentlike::class);
     }
+    public function recomments()
+    {
+        return $this->hasMany(Recomment::class);
+    }
 }

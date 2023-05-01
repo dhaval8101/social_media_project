@@ -27,5 +27,9 @@ class Postcomment extends Model
     {
         return $this->hasMany(Postcommentlike::class);
     }
-
+    public function recomment()
+    {
+        return $this->hasMany(Recomment::class);
+    }
+  
 }

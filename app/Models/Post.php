@@ -31,5 +31,8 @@ public function postcomment(){
   return $this->hasManyThrough(Postcomment::class,Postcomment::class);
 }
 
-
+public function recomments()
+{
+    return $this->hasMany(Recomment::class);
+}
 }

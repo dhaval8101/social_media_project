@@ -24,14 +24,14 @@ class PostCommentController extends Controller
         $postcomment->user_id = auth()->id();
         $postcomment->comment = $request->comment;
         $postcomment->save();
-        return redirect('/user-management')->with('success', 'Post comment successfully!');
+        return redirect()->route('comment.view', $postcomment->post_id)->with('success', 'Post liked successfully!');
         //return view('comment');
     }
 
-
     public function comment(Post $post)
     {
-        $postcomment = Postcomment::where('post_id', $post->id)
+        $postcomment = Postcomment::with('recomment')
+            ->where('post_id', $post->id)
             ->orderByDesc('created_at')
             ->get();
 

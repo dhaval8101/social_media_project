@@ -29,41 +29,73 @@ class PostCommentLikeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function isLike($post_id, $comment_id)
+    // {
+    //     $comment = Postcomment::find($comment_id);
+    //     if (!$comment) {
+    //         abort(404);
+    //     }
+    
+    //     $like = Postcommentlike::where('user_id', Auth::id())
+    //         ->where('post_id', $post_id)
+    //         ->where('postcomment_id', $comment_id)
+    //         ->first();
+    
+    //     if (!$like) {
+    //         // This is the first click, so create a new record with like set to 1
+    //         $like = Postcommentlike::create([
+    //             'user_id' => Auth::id(),
+    //             'post_id' => $post_id,
+    //             'like' => 1,
+    //             'dislike' => 0,
+    //             'postcomment_id' => $comment_id,
+    //         ]);
+    //     } elseif ($like->like) {
+    //         // This is the second click, so update the existing record to set like to 0
+    //         $like->update(['like' => 0, 'dislike' => 0]);
+    //     } else {
+    //         // This is an intermediate click, so update the existing record to set like to 1
+    //         $like->update(['like' => 1, 'dislike' => 0]);
+    //     }
+    //     $likeCount = Postcommentlike::where('post_id', $post_id)
+    //     ->where('postcomment_id', $comment_id)
+    //     ->where('like', true)
+    //     ->count();
+    
+    //     return redirect()->back()->with('success','Commentlike success');
+    // }
     public function isLike($post_id, $comment_id)
     {
         $comment = Postcomment::find($comment_id);
         if (!$comment) {
-            abort(404);
+            // handle error if comment is not found
         }
-    
         $like = Postcommentlike::where('user_id', Auth::id())
             ->where('post_id', $post_id)
             ->where('postcomment_id', $comment_id)
             ->first();
-    
         if (!$like) {
-            // This is the first click, so create a new record with like set to 1
+            // This is the first click, so create a new record with is_like set to 1
             $like = Postcommentlike::create([
                 'user_id' => Auth::id(),
                 'post_id' => $post_id,
-                'like' => 1,
-                'dislike' => 0,
+                'is_like' => 1,
+                'is_dislike' => 0,
                 'postcomment_id' => $comment_id,
             ]);
-        } elseif ($like->like) {
-            // This is the second click, so update the existing record to set like to 0
-            $like->update(['like' => 0, 'dislike' => 0]);
+        } elseif ($like->is_like) {
+            // This is the second click, update is_like to 0
+            $like->update(['is_like' => 0]);
         } else {
-            // This is an intermediate click, so update the existing record to set like to 1
-            $like->update(['like' => 1, 'dislike' => 0]);
+            // This is a click, update is_like to 1
+            $like->update(['is_like' => 1, 'is_dislike' => 0]);
         }
-    
         $likeCount = Postcommentlike::where('post_id', $post_id)
             ->where('postcomment_id', $comment_id)
-            ->where('like', true)
+            ->where('is_like', true)
             ->count();
-    
-        return response()->json(['like_count' => $likeCount, 'message' => 'Comment liked/disliked successfully!']);
+            // dd($like);
+            return redirect()->back()->with('success',' User Commentlike');
     }
     
     // Update like and dislike count
@@ -84,24 +116,24 @@ class PostCommentLikeController extends Controller
             $like = Postcommentlike::create([
                 'user_id' => Auth::user()->id,
                 'post_id' => $post_id,
-                'like' => 0,
-                'dislike' => 1,
+                'is_like' => 0,
+                'is_dislike' => 1,
                 'postcomment_id' => $comment_id,
             ]);
-        } elseif ($like->dislike) {
+        } elseif ($like->is_dislike) {
             // This is the second click, so update the existing record to set dislike to 0
-            $like->update(['dislike' => 0]);
+            $like->update(['is_dislike' => 0]);
         } else {
             // This is an intermediate click, so update the existing record to set dislike to 1
-            $like->update(['dislike' => 1, 'like' => 0]);
+            $like->update(['is_dislike' => 1, 'is_like' => 0]);
         }
         
-        $dislikeCount = Postcommentlike::where('post_id',  $post_id)
-            ->where('postcomment_id', $comment_id)
-            ->where('dislike', true)
-            ->count();
+        $dislikeCount = Postcommentlike::where('post_id', $post_id)
+        ->where('postcomment_id', $comment_id)
+        ->where('is_dislike', true)
+        ->count();
     
-        return response()->json(['dislike_count' => $dislikeCount, 'message' => 'Comment liked/disliked successfully!']);
+        return redirect()->back()->with('success','Commentlike success');
     }
     
     

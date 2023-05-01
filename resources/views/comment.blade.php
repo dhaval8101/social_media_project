@@ -11,11 +11,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-ZNDeGds1Ntwpgx5W5y+j+5PjJ/A/2QrP3WZL2Qm1M6U7z6RKpG6y9EL6gLvggCfKz43JW8Ebsav34AlYcKrx+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+    function dislike(x) {
+        x.classList.toggle('fa-thumbs-down')
+    }
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {{-- <style>
 
 
@@ -380,6 +392,7 @@ form{
 
     @if($postcomment->count() > 0)
     @foreach($postcomment as $comment)
+    {{-- @foreach($data as $datas ) --}}
     <div class="panel">
         <div class="panel-body">
             <!-- Newsfeed Content -->
@@ -391,11 +404,24 @@ form{
                         {{-- <a href="#" class="btn-link text-semibold media-heading box-inline">Lisa D.</a>
           <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i> - From Mobile - 11 min ago</p> --}}
                     </div>
-                    <p>{{ $comment->comment }}</p>
+                   <h4>{{ $comment->comment }}</h4>
+               @if (auth()->check() && auth()->user()->id === $comment->user_id)       
+  @foreach ($comment->recomment as $recomment)
+
+    <p>{{ $recomment->recomment }} <button type="button" class="btn btn-outline-secondary"><a type="submit" style="color:red"   href={{url('recomment/'.$recomment->id) }}>Delete</a></button></p>
+  @endforeach
+                    @endif
+
+                   
+
+                    {{-- <p>{{ $datas->comment }}</p> --}}
                     <div class="pad-ver">
                         <div class="btn-group">
-
-                            <a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
+                                @if (auth()->check() && auth()->user()->id === $comment->user_id)
+                    <button class="btn btn-dark mb-4 "><a type="submit" style="color:white" class="link-light text-decoration-none" href={{url('postcomment/'.$comment->id) }}>Delete</a></button>
+                                      @endif
+                            {{-- <a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
+                            
                                 <button type="button" class="btn btn-link">
                                     <i class="fa fa-thumbs-up like-icon{{ $comment->likes && $comment->likes->where('user_id', Auth::id())->where('like', true)->count() > 0 ? ' active' : '' }}" style="font-size:20px"></i>
                                     <span class="like-count">{{ $comment->likes ? $comment->likes->where('like', true)->count() : 0 }}</span>
@@ -407,55 +433,54 @@ form{
                                     <i class="fa fa-thumbs-down dislike-icon{{ $comment->likes && $comment->likes->where('user_id', Auth::id())->where('dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:20px"></i>
                                     <span class="dislike-count">{{ $comment->likes ? $comment->likes->where('dislike', true)->count() : 0 }}</span>
                                 </button>
-                            </a>
+                            </a> --}}
+
+
+
+       <a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
+<button type="button" class="btn btn-link like-button" data-post-id="{{ $post->id }}" data-comment-id="{{ $comment->id }}">
+    <i class="fa fa-thumbs-up like-icon{{ $post->likes->where('user_id', Auth::id())->where('is_like', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+    <span class="like-count">{{ $comment->likes ? $comment->likes->where('is_like', true)->count() : 0 }}</span>
+</button>
+</a>
+  <a class="dislike-button" href="{{ url('dis-like/'. $post->id.'/' .$comment->id) }}">
+                    <button type="button" class="btn btn-link">
+                    <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+                    <span class="dislike-count">{{ $comment->likes ? $comment->likes->where(' is_dislike', true)->count() : 0 }}</span>
+                    </button>
+                </a>
                         </div>
-                        <a class="btn btn-sm btn-default btn-hover-primary"   href="#" data-toggle="modal" data-target="#myModal">Comment</a>
+                        <a class="btn btn-sm btn-default btn-hover-primary" href="{{ route('comments', ['id' => $comment->id]) }}">Comment</a>
+
                     </div>
                     <hr>
-                    @if (auth()->check() && auth()->user()->id === $comment->user_id)
-                    <button class="btn btn-dark mb-4 "><a type="submit" style="color:white" class="link-light text-decoration-none" href={{url('postcomment/'.$comment->id) }}>Delete</a></button>
-                    @endif
+            
+                    {{-- <button class="btn btn-dark mb-4 "><a type="submit" style="color:white" class="link-light text-decoration-none" href={{url('postcomment/'.$comment->id) }}>Delete</a></button> --}}
+  
                     <!-- Button trigger modal -->
                     {{-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --}}
 
                     <!-- Modal -->
-                    {{-- <form method='post' action="{{ route('comment.storec', $postcomment) }}"> --}}
-                    {{-- @csrf   --}}
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">cancel</h4>
-                                </div>
-                                <div class="modal-body">
-                                    comment:-<input type="text" name="recomment" placeholder="comment here.....">
-                                    <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-paper-plane" style="color:pink;font-size:22px;" aria-hidden="true"></i></button>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
 
-                        </div>
-                    </div>
                     <!-- Comments -->
+
 
                 </div>
             </div>
         </div>
         <!--===================================================-->
         <!-- End Newsfeed Content -->
-        </form>
+
 
         <!-- Newsfeed Content -->
         <!--===================================================-->
 
         <!--===================================================-->
         <!-- End Newsfeed Content -->
-        @endforeach
+
+                @endforeach
+        {{-- @endforeach --}}
         @else
         <p>No comments yet.</p>
         @endif
@@ -463,69 +488,71 @@ form{
     </div>
     </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.like-button').on('click', function(e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                var icon = $(this).find('.like-icon');
-                var count = $(this).find('.like-count');
-                $.ajax({
-                    url: url
-                    , method: 'GET'
-                    , success: function(response) {
-                        count.text(response.like_count);
-                        if (icon.hasClass('active')) {
-                            icon.removeClass('active');
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeButtons = document.querySelectorAll('.like-button');
+        likeButtons.forEach(likeButton => {
+            likeButton.addEventListener('click', function() {
+                const postID = this.dataset.postId;
+                const commentID = this.dataset.commentId;
+                const isLike = this.dataset.like === 'true';
+                const isDislike = this.dataset.dislike === 'true';
+
+                fetch(`/is-like/${postID}/${commentID}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        is_like: isLike,
+                        is_dislike: isDislike
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to update like count');
+                    }
+                }).then(data => {
+                    const likeCountElement = this.querySelector('.like-count');
+                    if (likeCountElement) {
+                        likeCountElement.innerText = data.likeCount;
+                    }
+
+                    const likeIconElement = this.querySelector('.like-icon');
+                    if (likeIconElement) {
+                        if (data.isLiked) {
+                            likeIconElement.classList.remove('fa-thumbs-o-up');
+                            likeIconElement.classList.add('fa-thumbs-up');
                         } else {
-                            icon.addClass('active');
+                            likeIconElement.classList.remove('fa-thumbs-up');
+                            likeIconElement.classList.add('fa-thumbs-o-up');
                         }
                     }
-                });
-            });
-        });
-        $(document).ready(function() {
-            $('.dislike-button').on('click', function(e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                var icon = $(this).find('.dislike-icon');
-                var count = $(this).find('.dislike-count');
-                $.ajax({
-                    url: url
-                    , method: 'GET'
-                    , success: function(response) {
-                        count.text(response.dislike_count);
-                        if (icon.hasClass('active')) {
-                            icon.removeClass('active');
-                        } else {
-                            icon.addClass('active');
+
+
+                        const dislikeIconElement = this.querySelector('.dislike-icon');
+                        if (dislikeIconElement) {
+                            if (data.isDisliked) {
+                                dislikeIconElement.classList.remove('fa-thumbs-o-down');
+                                dislikeIconElement.classList.add('fa-thumbs-down');
+                            } else {
+                                dislikeIconElement.classList.remove('fa-thumbs-down');
+                                dislikeIconElement.classList.add('fa-thumbs-o-down');
+                            }
                         }
-                    }
-                });
-            });
-        });
-        $(document).ready(function() {
-            $('.dislike-button').on('click', function(e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                var icon = $(this).find('.dislike-icon');
-                var count = $(this).find('.dislike-count');
-                $.ajax({
-                    url: url
-                    , method: 'GET'
-                    , success: function(response) {
-                        count.text(response.dislike_count);
-                        if (icon.hasClass('active')) {
-                            icon.removeClass('active');
-                        } else {
-                            icon.addClass('active');
-                        }
-                    }
+                    }).catch(error => {
+                        console.error(error);
+                    });
                 });
             });
         });
 
     </script>
+
+
 
 
     </body>
