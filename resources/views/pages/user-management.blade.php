@@ -126,12 +126,14 @@
                         <button type="button" class="btn btn-link">
                             <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:25px"></i>
                             <span class="dislike-count">{{ $post->likes->where('is_dislike', true)->count() }}</span>
+                            
+                            
                         </button>
+                        
                     </a>
 
               <a href="{{ route('comment.view', $post->id) }}" class="d-flex align-items-center me-3">
-    <i class="far fa-comment-dots me-2" style="margin:20px"></i>
-    <p class="mb-0">Comment</p>
+<i class='fas fa-comment-dots' style='font-size:36px;margin:15px;'></i>
 </a>
 
 
