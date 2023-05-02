@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
+{{-- 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-ZNDeGds1Ntwpgx5W5y+j+5PjJ/A/2QrP3WZL2Qm1M6U7z6RKpG6y9EL6gLvggCfKz43JW8Ebsav34AlYcKrx+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   
+    --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -345,30 +346,25 @@ form{
             margin-top: 15px;
         }
 
-        .like-icon,
-        .dislike-icon {
-            margin-right: 4px;
-        }
+      .like-icon,
+    .dislike-icon {
+        margin-right: 1px;
+    }
 
-        .like-count,
-        .dislike-count {
-            margin-left: 5px;
-            font-weight: bold;
-        }
-
-        .like-icon.active {
-            color: blue;
-        }
-
-        .dislike-icon.active {
-            color: red;
-        }
-
-        .like-icon,
-        .dislike-icon {
-            color: grey;
-        }
-
+    .like-count,
+    .dislike-count {
+        margin-left: 1px;
+        font-weight: bold;
+    }
+.like-icon.active {
+    color: blue;
+}
+.dislike-icon.active {
+    color: red;
+}
+.like-icon, .dislike-icon {
+    color: grey;
+}
     </style>
 
 
@@ -437,16 +433,17 @@ form{
 
 
 
+
        <a class="like-button" href="{{ url('is-like/'. $post->id.'/' .$comment->id) }}">
-<button type="button" class="btn btn-link like-button" data-post-id="{{ $post->id }}" data-comment-id="{{ $comment->id }}">
-    <i class="fa fa-thumbs-up like-icon{{ $post->likes->where('user_id', Auth::id())->where('is_like', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
-    <span class="like-count">{{ $comment->likes ? $comment->likes->where('is_like', true)->count() : 0 }}</span>
-</button>
-</a>
+                        <button type="button" class="btn btn-link">
+                       <i class="fa fa-thumbs-up like-icon{{ $post->likes->where('user_id', Auth::id())->where('like', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+                        <span class="like-count">{{ $comment->likes ? $comment->likes->where('like', true)->count() : 0 }}</span>
+                        </button>
+                    </a>
   <a class="dislike-button" href="{{ url('dis-like/'. $post->id.'/' .$comment->id) }}">
                     <button type="button" class="btn btn-link">
-                    <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('is_dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
-                    <span class="dislike-count">{{ $comment->likes ? $comment->likes->where(' is_dislike', true)->count() : 0 }}</span>
+                    <i class="fa fa-thumbs-down dislike-icon{{ $post->likes->where('user_id', Auth::id())->where('dislike', true)->count() > 0 ? ' active' : '' }}" style="font-size:30px"></i>
+                    <span class="dislike-count">{{ $comment->likes ? $comment->likes->where(' dislike', true)->count() : 0 }}</span>
                     </button>
                 </a>
                         </div>
@@ -499,12 +496,13 @@ form{
                 const isLike = this.dataset.like === 'true';
                 const isDislike = this.dataset.dislike === 'true';
 
-                fetch(`/is-like/${postID}/${commentID}`, {
+                fetch(`/is-like/${post_id}/${comment_id}`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        is_like: isLike,
-                        is_dislike: isDislike
+                        like: isLike,
+                        dislike: isDislike
                     }),
+                    console("dsss")
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
